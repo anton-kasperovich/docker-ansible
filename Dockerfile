@@ -10,6 +10,7 @@ RUN apk --update add sudo \
     python \
     py-pip \
     openssl \
+    openssh \
     ca-certificates
 
 RUN addgroup ansible \
