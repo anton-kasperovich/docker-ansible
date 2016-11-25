@@ -3,6 +3,7 @@ FROM alpine:3.4
 MAINTAINER Anton Kasperovich <anton.kaspiarovich@gmail.com>
 
 ENV ANSIBLE_VERSION 2.2.0.0
+ENV ANSIBLE_LINT_VERSION 3.4.4
 
 RUN apk --update add sudo \
     git \
@@ -21,6 +22,7 @@ RUN apk --update add --virtual build-dependencies \
     libffi-dev \
     openssl-dev \
     && pip install -U ansible==$ANSIBLE_VERSION \
+    && pip install -U ansible-lint==$ANSIBLE_LINT_VERSION \
     && apk del build-dependencies
 
 RUN mkdir -p /etc/ansible \
