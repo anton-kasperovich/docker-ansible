@@ -1,14 +1,18 @@
 FROM alpine:3.4
 
-MAINTAINER Anton Kasperovich <iniwebaka@gmail.com>
+MAINTAINER Anton Kasperovich <anton.kaspiarovich@gmail.com>
 
 ENV ANSIBLE_VERSION 2.2.0.0
 
 RUN apk --update add sudo \
+    git \
     python \
     py-pip \
     openssl \
     ca-certificates
+
+RUN addgroup ansible \
+    && adduser -s /bin/sh -D -G ansible ansible
 
 RUN apk --update add --virtual build-dependencies \
     build-base \
@@ -20,6 +24,12 @@ RUN apk --update add --virtual build-dependencies \
     && apk del build-dependencies
 
 RUN mkdir -p /etc/ansible \
-    && echo 'localhost' > /etc/ansible/hosts
+    && echo 'localhost' > /etc/ansible/hosts \
+    && mkdir /ansible \
+    && chown -R ansible:ansible /etc/ansible /ansible
+
+USER ansible
+VOLUME /ansible
+WORKDIR /ansible
 
 CMD [ "ansible-playbook", "--help" ]
